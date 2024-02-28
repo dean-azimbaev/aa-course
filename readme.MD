@@ -1,10 +1,15 @@
-<h1>Асинхронная архитектура</h1>
+<h1>Курс по асинхронной архитектуре <a href="https://tough-dev.school/architecture">(АА)</a></h1>
 
-<h2> Общее описание </h2>
+## Ссылки на домашки
 
-Репозиторий будет содержать код системы разрабатываемой в процессе прохождения <a href="https://tough-dev.school/architecture">курса по АА</a>.
-
-Ссылка на <a href="https://www.figma.com/file/s4cHgQfdCrtHN9yXnrjaNb/Async-Architecture-Lesson-0?type=whiteboard&node-id=0%3A1&t=ZToUtttSR9LWoB3e-1">нулевую домашку</a>
+<ul>
+    <li>
+        <a href="https://www.figma.com/file/s4cHgQfdCrtHN9yXnrjaNb/Async-Architecture-Lesson-0?type=whiteboard&node-id=0%3A1&t=ZToUtttSR9LWoB3e-1">[hw-0] Ссылка на нулевую домашку</a>
+    </li>
+    <li>
+        <a href="https://miro.com/app/board/uXjVMIF1ArQ=/?share_link_id=299108140749">[hw-1] Ссылка на первую домашку</a>
+    </li>
+</ul>
 
 ## Содержимое
 
