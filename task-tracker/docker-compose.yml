@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  pg:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_DB: 'task_tracker'
+      POSTGRES_USER: 'task_tracker_user'
+      POSTGRES_PASSWORD: 'task_tracker_user_password'
+    ports:
+      - '5432:5432'
