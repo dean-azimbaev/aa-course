@@ -3,6 +3,7 @@ import { ConfigService as Config } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 import { AppOptions } from './app.options';
+import { KafkaConfig } from 'kafkajs';
 
 @Injectable()
 export class ConfigService {
@@ -16,7 +17,7 @@ export class ConfigService {
     return this.config.get<TypeOrmModuleOptions>('config.databases.pg');
   }
 
-  get broker(): any {
-    return {};
+  get kafka(): KafkaConfig {
+    return this.config.get('config.broker.kafka');
   }
 }

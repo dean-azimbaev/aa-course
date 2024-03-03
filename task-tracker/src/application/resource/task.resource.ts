@@ -1,9 +1,21 @@
-import { Controller, Post } from '@nestjs/common';
+import { Body, Controller, Param, Post } from '@nestjs/common';
 
+import { TaskInteractor } from '../task';
+
+class NewTaskDTO {
+  description: string;
+}
 @Controller('tasks')
 export class TaskController {
+  constructor(private tasks: TaskInteractor) {}
+
   @Post()
-  create() {
-    
+  new(@Body() { description }: NewTaskDTO) {
+    return this.tasks.new(description);
+  }
+
+  @Post(':task_id/reassing')
+  reasign(@Param('task_id') task_id: string) {
+    return this.tasks.reassign(task_id);
   }
 }

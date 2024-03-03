@@ -2,46 +2,47 @@ import { AggregateRoot } from '@nestjs/cqrs';
 
 import { TaskStatus } from './value';
 import { NewTaskAdded, TaskCompleted, TaskReassigned } from './event';
+import { Worker } from '../worker';
 
 export class Task extends AggregateRoot {
   public readonly id: string;
 
-  private _status: TaskStatus;
-  private _worker_id: string;
+  private status: TaskStatus;
+  private _description: string;
+  private worker: Worker;
 
-  private constructor(id: string, executor_id: string) {
+  constructor(id: string, worker: Worker, description: string) {
     super();
     this.id = id;
-    this._status = TaskStatus.created();
-    this._worker_id = executor_id;
+    this.status = TaskStatus.created();
+    this.worker = worker;
+    this._description = description;
   }
 
-  static New = (id: string, executor_id: string) => {
-    const newTask = new Task(id, executor_id);
+  static New = (id: string, description: string, worker: Worker) => {
+    const newTask = new Task(id, worker, description);
 
-    newTask.publish(new NewTaskAdded(id, executor_id));
+    process.nextTick(() => newTask.publish(new NewTaskAdded(id, worker.id)));
 
     return newTask;
   };
 
   complete() {
-    this._status = TaskStatus.completed();
+    this.status = TaskStatus.completed();
     this.publish(new TaskCompleted(this.id));
   }
 
-  reassign(new_executor: string) {
-    const prev_executor_id = this._worker_id;
-    this._worker_id = new_executor;
-    this.publish(new TaskReassigned(this.id, prev_executor_id, new_executor));
+  reassign(newWorker: Worker) {
+    const prev_worker = this.worker;
+    this.worker = newWorker;
+    this.publish(new TaskReassigned(this.id, prev_worker.id, newWorker.id));
   }
 
-  get status() {
-    return this._status;
+  get description() {
+    return this._description;
   }
 
-  private set status(val: TaskStatus) {
-    this._status = val;
+  private set description(text: string) {
+    this._description = text;
   }
-
-  get worker() {}
 }

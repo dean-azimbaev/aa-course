@@ -5,6 +5,7 @@ import * as Joi from 'joi';
 import { ConfigService as Config } from './config.service';
 import configuration from './configuration';
 import { databaseConfigSchema } from './database';
+import { brokerConfigSchema } from './broker';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { databaseConfigSchema } from './database';
       validationSchema: Joi.object({
         HTTP_PORT: Joi.number().default(5000),
         ...databaseConfigSchema,
+        ...brokerConfigSchema
       }),
     }),
   ],

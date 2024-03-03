@@ -1,26 +1,31 @@
-export class DomainEvent {
-  protected name: string;
+type Payload = {
+  name: string;
+  id: string;
+  data: Record<string, any>;
+};
 
-  constructor(name: string) {
+export class DomainEvent {
+  public readonly name: string;
+  public readonly id?: string;
+
+  constructor(name: string, id?: string) {
     this.name = name;
+    this.id = id;
   }
 
   toPayload() {
-    const result = {
+    const result: Payload = {
       name: this.name,
+      id: this.id,
       data: {},
     };
-
-    const data: Record<string, any> = {};
 
     for (const [key, value] of Object.entries(this)) {
       if (key === 'name') {
         continue;
       }
-      data[key] = value;
+      result.data[key] = value;
     }
-
-    result.data = data;
 
     return result;
   }

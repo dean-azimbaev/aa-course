@@ -1,24 +1,25 @@
 import { EntitySchema } from 'typeorm';
 
-enum TaskTrackerUserRole {
+export enum TaskTrackerUserRole {
   WORKER = 'WORKER',
   MANAGER = 'MANAGER',
 }
 
-export class TaskTrackerUser {
+export class TaskTrackerUserDA {
   readonly id: string;
   readonly public_id: string;
   readonly role: TaskTrackerUserRole;
 }
 
-export const UserSchema = new EntitySchema<TaskTrackerUser>({
+export const TaskTrackerUserSchema = new EntitySchema<TaskTrackerUserDA>({
   name: 'user',
   tableName: 'user',
+  target: TaskTrackerUserDA,
   columns: {
     id: {
-      type: 'int',
+      type: 'uuid',
       primary: true,
-      generated: true,
+      generated: 'uuid',
     },
     public_id: {
       type: 'uuid',
@@ -26,7 +27,7 @@ export const UserSchema = new EntitySchema<TaskTrackerUser>({
     },
     role: {
       type: 'enum',
-      enum: [TaskTrackerUserRole],
+      enum: TaskTrackerUserRole,
     },
   },
 });

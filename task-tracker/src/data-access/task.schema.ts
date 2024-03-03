@@ -2,10 +2,17 @@ import { EntitySchema } from 'typeorm';
 
 import { Task, TaskStatus, TaskStatusEnum } from 'src/domain';
 
-export const TaskSchema = new EntitySchema<Task>({
+export class TaskDA {
+  readonly id: string;
+  readonly status: TaskStatus;
+  readonly worker_id: string;
+  readonly description: string;
+}
+
+export const TaskSchema = new EntitySchema<TaskDA>({
   tableName: 'task',
   name: 'task',
-  target: Task,
+  target: TaskDA,
   columns: {
     id: {
       primary: true,
@@ -19,7 +26,10 @@ export const TaskSchema = new EntitySchema<Task>({
         to: ({ value }: TaskStatus) => value,
       },
     },
-    worker: {
+    description: {
+      type: 'varchar',
+    },
+    worker_id: {
       type: 'uuid',
     },
   },
