@@ -48,6 +48,7 @@ export class TaskTrackerConsumer implements OnModuleInit {
 
     const json = this.deserialize(message);
 
+    //@TODO: implement schema validation
     this.eventsMeta.validate(json);
 
     switch (json.event_name) {

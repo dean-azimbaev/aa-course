@@ -1,6 +1,15 @@
 version: "3"
 
 services:
+  pg_billing:
+    container_name: pg-billing
+    image: postgres
+    environment:
+      POSTGRES_DB: 'billing'
+      POSTGRES_USER: 'billing_user'
+      POSTGRES_PASSWORD: 'billing_user_password'
+    ports:
+        - '5434:5432'
   pg_auth:
     container_name: pg-oauth
     image: postgres

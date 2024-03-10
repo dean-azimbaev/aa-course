@@ -43,6 +43,6 @@ export class IncomingEventsMeta {
   }
 
   validate(incomingEvent: BrokerMessage) {
-    // implement schema registry logic
+    // validate event with schema registry
   }
 }
