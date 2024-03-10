@@ -2,7 +2,7 @@ import { IEvent, IEventPublisher } from '@nestjs/cqrs';
 import { Producer, Kafka, KafkaConfig, Message } from 'kafkajs';
 
 import { DomainEvent } from 'src/domain';
-import { KafkaTopicRegistry } from './event-topics';
+import { KafkaTopicRegistry } from './topics';
 import { DomainProducer } from './types';
 
 export class DomainEventProducer implements DomainProducer {
@@ -15,9 +15,13 @@ export class DomainEventProducer implements DomainProducer {
   ) {}
 
   async connect() {
-    const kafka = new Kafka(this.config);
+    const kafka = new Kafka({
+      brokers: ['localhost:9092']
+    });
 
-    this._producer = kafka.producer();
+    this._producer = kafka.producer({
+      allowAutoTopicCreation: true,
+    });
     await this._producer.connect();
   }
 
@@ -31,9 +35,6 @@ export class DomainEventProducer implements DomainProducer {
     if (event.id) {
       message.key = event.id;
     }
-
-    console.log(topic);
-    console.log(message);
 
     this._producer.send({
       topic: topic,

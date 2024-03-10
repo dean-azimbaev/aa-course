@@ -7,6 +7,6 @@ type Kafka = {
 export const kafkaConfig = (): Kafka => ({
   kafka: {
     brokers: process.env.KAFKA_CLUSTER.split(','),
-    clientId: 'trask-tracker'
+    clientId: 'task-tracker'
   },
 });

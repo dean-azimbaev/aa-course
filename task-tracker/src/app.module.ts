@@ -14,6 +14,7 @@ import {
   Messaging,
   DomainProducer,
 } from './port';
+import { ClientProxy, ClientsModule } from '@nestjs/microservices';
 
 @Module({
   imports: [
@@ -24,6 +25,17 @@ import {
       inject: [Config],
       useFactory: ({ pg }: Config) => pg,
     }),
+    ClientsModule.register([
+      {
+        name: 'TEST_PRODUCER',
+        options: {
+          client: {
+            clientId: 'task-tracker-producer',
+            brokers: ['localhost:9092'],
+          },
+        },
+      },
+    ]),
   ],
   controllers: [...Resources],
   providers: [...Adapters, ...Messaging, ...Application, DomainRegistry],
@@ -36,6 +48,8 @@ export class AppModule implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
+    // await this.client.connect();
+
     await this.domainProducer.connect();
 
     console.log('producer connected');
