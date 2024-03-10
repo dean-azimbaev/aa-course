@@ -3,18 +3,23 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { Consumer, EachMessagePayload, Kafka, KafkaMessage } from 'kafkajs';
 import { ConfigService } from 'src/config';
 import { BrokerMessage } from 'src/common';
+import { AuthInteractor } from 'src/application';
 
-import { IncomingTopic } from './incoming-events';
+import { IncomingEventsMeta, IncomingTopic } from './events-meta.manager';
+import { UserCreated, UserRoleChanged, UserUpdated } from './events';
 
 @Injectable()
 export class TaskTrackerConsumer implements OnModuleInit {
   private consumer: Consumer;
   private logger: Logger = new Logger(TaskTrackerConsumer.name);
 
-  constructor(private config: ConfigService) {}
+  constructor(
+    private config: ConfigService,
+    private auth: AuthInteractor,
+    private eventsMeta: IncomingEventsMeta,
+  ) {}
 
   async onModuleInit() {
-    console.log(this.config.kafka);
     const kafka = new Kafka(this.config.kafka);
 
     this.consumer = kafka.consumer({
@@ -41,13 +46,35 @@ export class TaskTrackerConsumer implements OnModuleInit {
     );
     this.logger.debug(`payload: ${message.value.toString()}`);
 
-    // const json = message.value.toJSON();
     const json = this.deserialize(message);
 
-    console.log('JSON: ', json);
+    this.eventsMeta.validate(json);
+
+    switch (json.event_name) {
+      case UserRoleChanged.name:
+        await this.auth.userRoleChanged(json.data.public_id, json.data.new_role);
+        break;
+      case UserUpdated.name:
+        await this.auth.updateTaskTrackerUser(
+          json.data.public_id,
+          json.data.username,
+          json.data.role,
+        );
+        break;
+      case UserCreated.name:
+        await this.auth.createTaskTrackerUser(
+          json.data.public_id,
+          json.data.username,
+          json.data.role,
+        );
+        this.logger.debug(`Task tracker user created`);
+        break;
+    }
   }
 
   private deserialize(message: KafkaMessage): BrokerMessage {
     return JSON.parse(message.value.toString());
   }
+
+  private validateEvent(name: string) {}
 }

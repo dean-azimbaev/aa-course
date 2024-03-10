@@ -4,8 +4,8 @@ import * as uuid from 'uuid';
 import { TaskRepository as IRepository, Task, Worker } from 'src/domain';
 import {
   TaskDA,
-  TaskTrackerUserDA,
-  TaskTrackerUserRole,
+  UserDA,
+  UserRole,
 } from 'src/data-access';
 import { Logger } from '@nestjs/common';
 
@@ -20,8 +20,8 @@ export class TaskRepository implements IRepository {
     if (!taskDa) return;
 
     const worker = await this.ds.manager
-      .findOne(TaskTrackerUserDA, {
-        where: { id: taskDa.worker_id, role: TaskTrackerUserRole.WORKER },
+      .findOne(UserDA, {
+        where: { id: taskDa.worker_id, role: UserRole.WORKER },
       })
       .then((user) => (user ? new Worker(user.id) : null));
 

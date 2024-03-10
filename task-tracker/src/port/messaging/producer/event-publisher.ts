@@ -10,7 +10,9 @@ export class DomainEventPublisher implements IDomainEventPublisher {
   constructor(private producer: TaskTrackerProducer) {}
 
   publish = <TEvent extends DomainEvent>(event: TEvent, context?: unknown) => {
-    this.producer.produce(event);
+    if (event instanceof DomainEvent) {
+      this.producer.produce(event);
+    }
 
     if (this._original?.publish) {
       this._original.publish(event, context);

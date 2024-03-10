@@ -1,6 +1,6 @@
 import { Body, Controller, Param, Post } from '@nestjs/common';
 
-import { TaskInteractor } from '../task';
+import { TaskInteractor } from '../application/task';
 
 class NewTaskDTO {
   description: string;

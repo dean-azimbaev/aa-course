@@ -6,7 +6,8 @@ import {
   ConfigurationModule as ConfigModule,
   ConfigService as Config,
 } from './config';
-import { Resources, Application } from './application';
+import { Application } from './application';
+import { Resources } from './resource';
 import { DomainRegistry } from './domain';
 import { Adapters, Messaging, DomainEventPublisher } from './port';
 
