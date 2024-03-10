@@ -1,12 +1,7 @@
-import {
-  CommandHandler,
-  EventBus,
-  EventPublisher,
-  ICommandHandler,
-} from '@nestjs/cqrs';
+import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 
+import { DomainRegistry, Task } from 'src/domain';
 import { AddNewTask } from '../add-new-task.command';
-import { DomainRegistry, NewTaskAdded, Task } from 'src/domain';
 
 @CommandHandler(AddNewTask)
 export class AddNewTaskHandler implements ICommandHandler<AddNewTask> {

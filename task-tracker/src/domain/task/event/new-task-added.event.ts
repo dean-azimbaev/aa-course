@@ -1,13 +1,10 @@
-import { DomainEvent } from '../../event.base';
+import { DomainEvent } from 'src/common';
 
 export class NewTaskAdded extends DomainEvent {
-  public readonly id: string;
-  public readonly executor_id: string;
-
-  constructor(id: string, executor: string) {
+  constructor(
+    public readonly public_id: string,
+    public readonly worker_id: string,
+  ) {
     super(NewTaskAdded.name);
-
-    this.id = id;
-    this.executor_id = executor;
   }
 }

@@ -1,4 +1,4 @@
-import { CUDEvent } from '../../cud-event.base';
+import { CUDEvent } from 'src/common';
 
 export class TaskCreatedEvent extends CUDEvent {
   constructor() {
