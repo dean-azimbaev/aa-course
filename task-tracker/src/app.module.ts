@@ -1,4 +1,4 @@
-import { Inject, Module, OnModuleInit } from '@nestjs/common';
+import { Module, OnModuleInit } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CqrsModule, EventBus } from '@nestjs/cqrs';
 
@@ -8,13 +8,7 @@ import {
 } from './config';
 import { Resources, Application } from './application';
 import { DomainRegistry } from './domain';
-import {
-  Adapters,
-  DOMAIN_EVENT_PRODUCER,
-  Messaging,
-  DomainProducer,
-} from './port';
-import { ClientProxy, ClientsModule } from '@nestjs/microservices';
+import { Adapters, Messaging, DomainEventPublisher } from './port';
 
 @Module({
   imports: [
@@ -25,37 +19,19 @@ import { ClientProxy, ClientsModule } from '@nestjs/microservices';
       inject: [Config],
       useFactory: ({ pg }: Config) => pg,
     }),
-    ClientsModule.register([
-      {
-        name: 'TEST_PRODUCER',
-        options: {
-          client: {
-            clientId: 'task-tracker-producer',
-            brokers: ['localhost:9092'],
-          },
-        },
-      },
-    ]),
   ],
   controllers: [...Resources],
   providers: [...Adapters, ...Messaging, ...Application, DomainRegistry],
 })
 export class AppModule implements OnModuleInit {
   constructor(
-    @Inject(DOMAIN_EVENT_PRODUCER)
-    private domainProducer: DomainProducer,
     private eventBus: EventBus,
+    private publisher: DomainEventPublisher,
   ) {}
 
   async onModuleInit() {
-    // await this.client.connect();
-
-    await this.domainProducer.connect();
-
-    console.log('producer connected');
-
-    this.domainProducer.bind(this.eventBus.publisher);
-
-    this.eventBus.publisher = this.domainProducer;
+    this.publisher.bind(this.eventBus.publisher);
+    //@ts-ignore
+    this.eventBus.publisher = this.publisher;
   }
 }

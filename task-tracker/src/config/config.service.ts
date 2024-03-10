@@ -18,7 +18,6 @@ export class ConfigService {
   }
 
   get kafka(): KafkaConfig {
-    console.log(this.config.get('config.broker.kafka'));
     return this.config.get('config.broker.kafka');
   }
 }

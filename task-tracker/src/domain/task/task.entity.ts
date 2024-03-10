@@ -29,7 +29,7 @@ export class Task extends AggregateRoot {
 
   complete() {
     this.status = TaskStatus.completed();
-    this.publish(new TaskCompleted(this.id));
+    this.publish(new TaskCompleted(this.id, this.worker.id));
   }
 
   reassign(newWorker: Worker) {

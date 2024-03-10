@@ -1,10 +1,7 @@
 import { IEvent, IEventPublisher } from '@nestjs/cqrs';
-import { Producer } from 'kafkajs';
 
-import { DomainEvent } from 'src/domain';
+import { DomainEvent } from 'src/common';
 
-export interface DomainProducer
-  extends IEventPublisher<DomainEvent>,
-    Partial<Producer> {
+export interface IDomainEventPublisher extends IEventPublisher<DomainEvent> {
   bind(publisher: IEventPublisher<IEvent>): void;
 }

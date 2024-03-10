@@ -6,4 +6,3 @@ export const Application: Provider[] = [TaskInteractor, ...TaskCommandHandlers];
 
 export * from './task';
 export * from './resource';
-export * from './cud-event.base';

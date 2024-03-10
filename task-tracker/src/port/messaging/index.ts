@@ -1,22 +1,16 @@
 import { Provider } from '@nestjs/common';
 
-import { ConfigService as Config } from 'src/config';
-import { DomainEventProducer } from './domain-event-producer';
-import { KafkaTopicRegistry } from './topics';
+import { TaskTrackerProducer } from './producer';
+import { OutgoingEventsMeta } from './outgoing-events';
 import { TaskTrackerConsumer } from './consumer';
-
-export const DOMAIN_EVENT_PRODUCER = Symbol('DOMAIN_EVENT_PRODUCER');
-export const CUD_EVENT_PRODUCER = Symbol('CUD_EVENT_PRODUCER');
+import { DomainEventPublisher } from './event-publisher';
 
 export const Messaging: Provider[] = [
-  KafkaTopicRegistry,
+  OutgoingEventsMeta,
   TaskTrackerConsumer,
-  {
-    provide: DOMAIN_EVENT_PRODUCER,
-    useFactory: ({ kafka }: Config, registry: KafkaTopicRegistry) =>
-      new DomainEventProducer(kafka, registry),
-    inject: [Config, KafkaTopicRegistry],
-  },
+  TaskTrackerProducer,
+  DomainEventPublisher,
 ];
 
 export * from './types';
+export { DomainEventPublisher };
