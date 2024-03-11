@@ -28,8 +28,6 @@ class SchemaRegistry {
 
     const result = jsonschema.validate(object, schema);
 
-    console.log(result.valid);
-
     return {
       is_valid: result.valid,
     };

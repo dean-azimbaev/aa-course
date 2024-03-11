@@ -2,18 +2,23 @@ import { Provider } from '@nestjs/common';
 
 import {
   TaskTrackerProducer,
-  OutgoingEventsMeta,
+  OugoinEventsMetaManager,
   DomainEventPublisher,
 } from './producer';
 
-import { TaskTrackerConsumer, IncomingEventsMeta } from './consumer';
+import {
+  TaskTrackerConsumer,
+  IncomingEventsMetaManager,
+  UserPersister,
+} from './consumer';
 
 export const Messaging: Provider[] = [
   TaskTrackerProducer,
-  OutgoingEventsMeta,
+  OugoinEventsMetaManager,
   DomainEventPublisher,
   TaskTrackerConsumer,
-  IncomingEventsMeta,
+  IncomingEventsMetaManager,
+  UserPersister,
 ];
 
 export { DomainEventPublisher };

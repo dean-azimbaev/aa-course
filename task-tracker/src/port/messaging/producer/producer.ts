@@ -4,7 +4,7 @@ import { randomUUID } from 'crypto';
 
 import { ConfigService } from 'src/config';
 import { DomainEvent, CUDEvent, BrokerMessage } from 'src/common';
-import { OutgoingEventsMeta } from './outgoing-events';
+import { OugoinEventsMetaManager } from './events-meta.manager';
 
 type Event = DomainEvent | CUDEvent;
 
@@ -13,7 +13,7 @@ export class TaskTrackerProducer implements OnModuleInit {
   private _producer: KafkaProducer;
 
   constructor(
-    private eventsMeta: OutgoingEventsMeta,
+    private eventsMeta: OugoinEventsMetaManager,
     private config: ConfigService,
   ) {}
 

@@ -20,4 +20,12 @@ export class ConfigService {
   get kafka(): KafkaConfig {
     return this.config.get('config.broker.kafka');
   }
+
+  get jwtUrl(): string {
+    return this.config.get('config.jwt');
+  }
+
+  get schemaRegistryUrl(): string {
+    return 'http://localhost:4001'
+  }
 }
