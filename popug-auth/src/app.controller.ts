@@ -44,4 +44,9 @@ export class AppController {
   changeRole(@Param('id') id: string, @Body('role') newRole: UserRole) {
     return this.auth.changeRole(id, newRole);
   }
+
+  @Post('verify')
+  verify(@Body('jwt') jwt: string) {
+    return this.auth.verify(jwt);
+  }
 }

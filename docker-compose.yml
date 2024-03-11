@@ -11,7 +11,7 @@ services:
     ports:
         - '5434:5432'
   pg_auth:
-    container_name: pg-oauth
+    container_name: pg_auth
     image: postgres
     environment:
       POSTGRES_DB: 'auth'

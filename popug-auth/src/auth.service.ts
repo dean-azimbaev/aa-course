@@ -52,11 +52,7 @@ export class AuthService {
     const user = this.ds.manager.create(UserDA, dto);
     const saved = await this.ds.manager.save(user);
 
-    const event = new UserCreated(
-      saved.public_id,
-      saved.username,
-      saved.role,
-    );
+    const event = new UserCreated(saved.public_id, saved.username, saved.role);
 
     this.producer.produce(event);
 
@@ -80,6 +76,10 @@ export class AuthService {
       access_token,
     };
   }
+
+  verify = (jwt: string) => {
+    return this.jwt.verifyAsync(jwt);
+  };
 
   private _token = (user: UserDA) => {
     return this.jwt.signAsync({
