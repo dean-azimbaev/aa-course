@@ -1,13 +1,10 @@
+import { Logger } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import * as uuid from 'uuid';
 
 import { TaskRepository as IRepository, Task, Worker } from 'src/domain';
-import {
-  TaskDA,
-  UserDA,
-  UserRole,
-} from 'src/data-access';
-import { Logger } from '@nestjs/common';
+import { TaskDA, UserDA } from 'src/data-access';
+import { UserRole } from 'src/application';
 
 export class TaskRepository implements IRepository {
   private logger: Logger = new Logger(`Infra: ${TaskRepository.name}`);
@@ -30,21 +27,23 @@ export class TaskRepository implements IRepository {
     }
 
     return Object.assign(
-      new Task(taskDa.id, worker, taskDa.description),
+      new Task(
+        taskDa.id,
+        worker,
+        taskDa.title,
+        taskDa.description,
+        taskDa.jira_id,
+      ),
       taskDa,
     );
   }
 
   save(task: Task): Promise<Task> {
-    const privateFieldsMapping: Partial<TaskDA> = {
-      //@ts-ignore
+    const workerMapping: Partial<TaskDA> = {
       worker_id: task.worker.id,
-      description: task.description,
     };
 
-    const save = Object.assign(new TaskDA(), privateFieldsMapping, task);
-
-    console.log(save);
+    const save = Object.assign(new TaskDA(), workerMapping, task);
 
     return this.ds.manager.save(TaskDA, save).then(() => task);
   }

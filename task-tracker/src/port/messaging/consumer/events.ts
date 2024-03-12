@@ -1,5 +1,5 @@
 import { CUDEvent, DomainEvent } from 'src/common';
-import { UserRole } from 'src/data-access';
+import { UserRole } from 'src/application';
 
 export class UserRoleChanged extends DomainEvent {
   constructor(

@@ -1,6 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { UserDA, UserRole } from 'src/data-access';
 import { DataSource } from 'typeorm';
+
+import { UserRole } from 'src/application';
+import { UserDA } from 'src/data-access';
 
 @Injectable()
 export class UserPersister {
@@ -8,11 +10,7 @@ export class UserPersister {
 
   constructor(private ds: DataSource) {}
 
-  async createUser(
-    public_id: string,
-    username: string,
-    role: UserRole,
-  ) {
+  async createUser(public_id: string, username: string, role: UserRole) {
     this.logger.debug(`createTaskTrackerUser()`);
     await this.ds.manager.save(UserDA, {
       public_id,
@@ -22,20 +20,16 @@ export class UserPersister {
     this.logger.debug(`task tracker user created`);
   }
 
-  async updateUser(
-    public_id: string,
-    username: string,
-    role: UserRole,
-  ) {
+  async updateUser(public_id: string, username: string, role: UserRole) {
     this.logger.debug(`updatedTaskTrackerUser()`);
     const userToUpdate = await this.ds.manager.findOne(UserDA, {
       where: { public_id },
     });
 
     if (userToUpdate) {
-      userToUpdate.username = username;
-      userToUpdate.role = role;
-      await this.ds.manager.save(userToUpdate);
+      await this.ds.manager.save(
+        Object.assign(new UserDA(), userToUpdate, { username, role }),
+      );
       this.logger.debug(`task tracker user updated`);
       return;
     }
