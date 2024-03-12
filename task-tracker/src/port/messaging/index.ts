@@ -11,6 +11,7 @@ import {
   IncomingEventsMetaManager,
   UserPersister,
 } from './consumer';
+import { SchemaRegistry } from './schema.registry';
 
 export const Messaging: Provider[] = [
   TaskTrackerProducer,
@@ -19,6 +20,7 @@ export const Messaging: Provider[] = [
   TaskTrackerConsumer,
   IncomingEventsMetaManager,
   UserPersister,
+  SchemaRegistry,
 ];
 
 export { DomainEventPublisher };

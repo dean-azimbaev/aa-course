@@ -17,6 +17,8 @@ export class AuthInteractor {
   ) {}
 
   verify = (jwt: string): Promise<User> => {
-    return lastValueFrom(this.http.post(this.VERIFY, { jwt }));
+    return lastValueFrom(this.http.post(this.VERIFY, { jwt })).then(
+      ({ data }) => data,
+    );
   };
 }
