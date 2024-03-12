@@ -1,67 +1,24 @@
+import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
-import { UserDA, UserRole } from 'src/data-access';
-import { DataSource } from 'typeorm';
+import { lastValueFrom } from 'rxjs';
+
+import { User } from './user';
+import { ConfigService } from 'src/config';
 
 @Injectable()
 export class AuthInteractor {
-  private logger: Logger = new Logger(AuthInteractor.name);
-
-  constructor(private ds: DataSource) {}
-
-  async createTaskTrackerUser(
-    public_id: string,
-    username: string,
-    role: UserRole,
-  ) {
-    this.logger.debug(`createTaskTrackerUser()`);
-    await this.ds.manager.save(UserDA, {
-      public_id,
-      username,
-      role,
-    });
-    this.logger.debug(`task tracker user created`);
+  private get VERIFY() {
+    return `${this.config.jwtUrl}/verify`;
   }
 
-  async updateTaskTrackerUser(
-    public_id: string,
-    username: string,
-    role: UserRole,
-  ) {
-    this.logger.debug(`updatedTaskTrackerUser()`);
-    const userToUpdate = await this.ds.manager.findOne(UserDA, {
-      where: { public_id },
-    });
+  constructor(
+    private http: HttpService,
+    private config: ConfigService,
+  ) {}
 
-    if (userToUpdate) {
-      userToUpdate.username = username;
-      userToUpdate.role = role;
-      await this.ds.manager.save(userToUpdate);
-      this.logger.debug(`task tracker user updated`);
-      return;
-    }
-
-    await this.ds.manager.save(UserDA, {
-      public_id,
-      username,
-      role,
-    });
-    this.logger.debug(`task tracker user upserted`);
-  }
-
-  async userRoleChanged(user_public_id: string, newRole: UserRole) {
-    this.logger.debug(
-      `changeRole(user_public_id, newRole) -> (${user_public_id}, ${newRole})`,
+  verify = (jwt: string): Promise<User> => {
+    return lastValueFrom(this.http.post(this.VERIFY, { jwt })).then(
+      ({ data }) => data,
     );
-    // const user = await this.ds.manager.findOne(UserDA, {
-    //   where: { public_id: user_public_id },
-    // });
-
-    // if (user) {
-    //   user.role = newRole;
-    // }
-
-    // await this.ds.manager.save(user);
-    this.logger.debug(`User role changed`);
-    // call business logic related to role changes
-  }
+  };
 }

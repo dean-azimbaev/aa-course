@@ -1,16 +1,12 @@
 import { EntitySchema } from 'typeorm';
 
-export enum UserRole {
-  WORKER = 'WORKER',
-  MANAGER = 'MANAGER',
-  ADMIN = 'ADMIN',
-}
+import { UserRole } from 'src/application';
 
 export class UserDA {
-  readonly public_id: string;
   readonly id: string;
-  public username: string;
-  public role: UserRole;
+  readonly public_id: string;
+  readonly username: string;
+  readonly role: UserRole;
 }
 
 export const TaskTrackerUserSchema = new EntitySchema<UserDA>({

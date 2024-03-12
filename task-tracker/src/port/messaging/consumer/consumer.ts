@@ -1,12 +1,14 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-
 import { Consumer, EachMessagePayload, Kafka, KafkaMessage } from 'kafkajs';
+
 import { ConfigService } from 'src/config';
 import { BrokerMessage } from 'src/common';
-import { AuthInteractor } from 'src/application';
-
-import { IncomingEventsMeta, IncomingTopic } from './events-meta.manager';
+import {
+  IncomingEventsMetaManager,
+  IncomingTopic,
+} from './events-meta.manager';
 import { UserCreated, UserRoleChanged, UserUpdated } from './events';
+import { UserPersister } from './user.persister';
 
 @Injectable()
 export class TaskTrackerConsumer implements OnModuleInit {
@@ -15,8 +17,8 @@ export class TaskTrackerConsumer implements OnModuleInit {
 
   constructor(
     private config: ConfigService,
-    private auth: AuthInteractor,
-    private eventsMeta: IncomingEventsMeta,
+    private users: UserPersister,
+    private eventsMeta: IncomingEventsMetaManager,
   ) {}
 
   async onModuleInit() {
@@ -48,21 +50,21 @@ export class TaskTrackerConsumer implements OnModuleInit {
 
     const json = this.deserialize(message);
 
-    this.eventsMeta.validate(json);
+    await this.eventsMeta.validate(json);
 
     switch (json.event_name) {
       case UserRoleChanged.name:
-        await this.auth.userRoleChanged(json.data.public_id, json.data.new_role);
+        await this.users.changeRole(json.data.public_id, json.data.new_role);
         break;
       case UserUpdated.name:
-        await this.auth.updateTaskTrackerUser(
+        await this.users.updateUser(
           json.data.public_id,
           json.data.username,
           json.data.role,
         );
         break;
       case UserCreated.name:
-        await this.auth.createTaskTrackerUser(
+        await this.users.createUser(
           json.data.public_id,
           json.data.username,
           json.data.role,
@@ -75,6 +77,4 @@ export class TaskTrackerConsumer implements OnModuleInit {
   private deserialize(message: KafkaMessage): BrokerMessage {
     return JSON.parse(message.value.toString());
   }
-
-  private validateEvent(name: string) {}
 }

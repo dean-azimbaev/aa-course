@@ -1,7 +1,8 @@
 import { DataSource } from 'typeorm';
 
 import { WorkerRepository as IRepository, Worker } from 'src/domain';
-import { UserDA, UserRole } from 'src/data-access';
+import { UserDA } from 'src/data-access';
+import { UserRole } from 'src/application';
 
 export class WorkerRepository implements IRepository {
   constructor(private ds: DataSource) {}

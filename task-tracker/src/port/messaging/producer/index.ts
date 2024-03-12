@@ -1,3 +1,3 @@
 export * from './event-publisher';
 export * from './producer';
-export * from './outgoing-events';
+export * from './events-meta.manager';

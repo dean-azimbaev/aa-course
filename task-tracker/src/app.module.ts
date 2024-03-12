@@ -1,6 +1,7 @@
 import { Module, OnModuleInit } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CqrsModule, EventBus } from '@nestjs/cqrs';
+import { HttpModule } from '@nestjs/axios';
 
 import {
   ConfigurationModule as ConfigModule,
@@ -15,6 +16,7 @@ import { Adapters, Messaging, DomainEventPublisher } from './port';
   imports: [
     ConfigModule,
     CqrsModule,
+    HttpModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [Config],

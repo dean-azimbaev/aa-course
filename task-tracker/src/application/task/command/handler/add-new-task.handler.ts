@@ -14,11 +14,16 @@ export class AddNewTaskHandler implements ICommandHandler<AddNewTask> {
     private publisher: EventPublisher,
   ) {}
 
-  async execute({ worker, description }: AddNewTask): Promise<void> {
+  async execute({
+    title,
+    jira_id,
+    worker,
+    description,
+  }: AddNewTask): Promise<void> {
     const taskId = await this.taskRepo.nextIdentity();
 
     const newTask = this.publisher.mergeObjectContext(
-      Task.New(taskId, description, worker),
+      Task.New(taskId, title, description, jira_id, worker),
     );
 
     //@ts-ignore

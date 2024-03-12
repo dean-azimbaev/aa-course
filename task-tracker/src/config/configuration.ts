@@ -9,6 +9,7 @@ export default registerAs('config', () => ({
     http: { port: +process.env.HTTP_PORT },
     host: process.env.HOST,
   },
+  jwt: process.env.JWT_VERIFIER,
   ...dbConfig(),
   ...brokerConfig(),
 }));

@@ -1,11 +1,13 @@
 import { EntitySchema } from 'typeorm';
 
-import { Task, TaskStatus, TaskStatusEnum } from 'src/domain';
+import { TaskStatus, TaskStatusEnum } from 'src/domain';
 
 export class TaskDA {
   readonly id: string;
   readonly status: TaskStatus;
   readonly worker_id: string;
+  readonly title: string;
+  readonly jira_id: string;
   readonly description: string;
 }
 
@@ -25,6 +27,12 @@ export const TaskSchema = new EntitySchema<TaskDA>({
         from: (status: TaskStatusEnum) => new TaskStatus(status),
         to: ({ value }: TaskStatus) => value,
       },
+    },
+    jira_id: {
+      type: 'varchar',
+    },
+    title: {
+      type: 'varchar',
     },
     description: {
       type: 'varchar',

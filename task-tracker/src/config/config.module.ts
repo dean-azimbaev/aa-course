@@ -13,8 +13,9 @@ import { brokerConfigSchema } from './broker';
       load: [configuration],
       validationSchema: Joi.object({
         HTTP_PORT: Joi.number().default(5000),
+        JWT_VERIFIER: Joi.string().required(),
         ...databaseConfigSchema,
-        ...brokerConfigSchema
+        ...brokerConfigSchema,
       }),
     }),
   ],
