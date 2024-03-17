@@ -12,8 +12,8 @@ export const dataSource = new DataSource({
   database: process.env.POSTGRES_DATABASE,
   password: process.env.POSTGRES_PASSWORD,
   entities: [
-    'dist/src/data-access/**/*.schema{.ts,.js}',
-    'dist/src/data-access/*.schema.ts',
+    'dist/src/**/data-access/*.schema{.ts,.js}',
+    'dist/src/**/data-access/schemas/*.schema{.ts,.js}',
   ],
-  migrationsTableName: 'migrations_history'
+  migrationsTableName: 'migrations_history',
 });

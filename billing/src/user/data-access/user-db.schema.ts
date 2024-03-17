@@ -1,10 +1,6 @@
 import { EntitySchema } from 'typeorm';
 
-export enum UserRole {
-  ADMIN = 'ADMIN',
-  WORKER = 'WORKER',
-  MANAGER = 'MANAGER',
-}
+import { UserRole } from '../role.enum';
 
 export class UserDA {
   public_id: string;
@@ -15,7 +11,7 @@ export class UserDA {
 }
 
 export const UserSchema = new EntitySchema<UserDA>({
-  name: 'user',
+  name: 'User',
   tableName: 'user',
   target: UserDA,
   columns: {
@@ -38,6 +34,7 @@ export const UserSchema = new EntitySchema<UserDA>({
     },
     balance: {
       type: 'int',
+      default: 0,
     },
   },
 });

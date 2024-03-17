@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService as Config } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { KafkaConfig } from 'kafkajs';
 
 import { AppOptions } from './app.options';
-import { KafkaConfig } from 'kafkajs';
 
 @Injectable()
 export class ConfigService {
@@ -22,5 +22,9 @@ export class ConfigService {
       brokers: ['localhost:9092'],
       clientId: 'billing',
     };
+  }
+
+  get schemaRegistryUrl() {
+    return 'http://localhost:4001'
   }
 }
