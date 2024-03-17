@@ -7,7 +7,9 @@ export class CUDEvent {
     const json: Record<string, any> = {};
 
     for (const [key, value] of Object.entries(this)) {
-      json[key] = value;
+      if (value) {
+        json[key] = value;
+      }
     }
 
     return json;

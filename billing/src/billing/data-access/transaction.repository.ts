@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 
 import { TransactionDA, TransactionType } from './schemas/transaction.schema';
 import { BillingCycleDA, BillingCycleStatus } from './schemas/cycle.schema';
-// import { UserDA } from 'src/user/data-access';
+import { UserDA } from 'src/user/data-access';
 
 @Injectable()
 export class TransactionRepository {
@@ -18,11 +18,9 @@ export class TransactionRepository {
     // const billing_cycle = await this.ds.manager.findOne(BillingCycleDA, {
     //   where: { status: BillingCycleStatus.OPENED },
     // });
-
     // const user = await this.ds.manager.findOne(UserDA, {
     //   where: { public_id: account_id },
     // });
-
     // const transaction: Partial<TransactionDA> = {
     //   account: user,
     //   type: TransactionType.DEPOSIT,
@@ -30,9 +28,7 @@ export class TransactionRepository {
     //   billing_cycle,
     //   comment,
     // };
-
     // user.balance += transaction.debit;
-
     // await this.ds.manager.save(transaction);
     // await this.ds.manager.save(user);
     // end db transaction
@@ -43,27 +39,32 @@ export class TransactionRepository {
     account_id: string,
     comment: string,
   ) {
-    // // start db transaction
-    // const billing_cycle = await this.ds.manager.findOne(BillingCycleDA, {
-    //   where: { status: BillingCycleStatus.OPENED },
-    // });
+    // start db transaction
+    const billing_cycle = await this.ds.manager.findOne(BillingCycleDA, {
+      where: { status: BillingCycleStatus.OPENED },
+    });
 
-    // const user = await this.ds.manager.findOne(UserDA, {
-    //   where: { public_id: account_id },
-    // });
+    const user = await this.ds.manager.findOne(UserDA, {
+      where: { public_id: account_id },
+    });
 
-    // const transaction: Partial<TransactionDA> = {
-    //   account: user,
-    //   type: TransactionType.WITHDRAW,
-    //   credit: amount,
-    //   billing_cycle,
-    //   comment,
-    // };
+    console.log('Found user: ', user);
 
-    // user.balance -= transaction.debit;
+    const transaction: Partial<TransactionDA> = this.ds.manager.create(
+      TransactionDA,
+      {
+        account: user,
+        type: TransactionType.WITHDRAW,
+        credit: amount,
+        billing_cycle,
+        comment,
+      },
+    );
 
-    // await this.ds.manager.save(transaction);
-    // await this.ds.manager.save(user);
+    user.balance -= transaction.credit;
+
+    await this.ds.manager.save(transaction);
+    await this.ds.manager.save(user);
     // end db transaction
   }
 
@@ -72,11 +73,9 @@ export class TransactionRepository {
     // const billing_cycle = await this.ds.manager.findOne(BillingCycleDA, {
     //   where: { status: BillingCycleStatus.OPENED },
     // });
-
     // const user = await this.ds.manager.findOne(UserDA, {
     //   where: { public_id: account_id },
     // });
-
     // const transaction: Partial<TransactionDA> = {
     //   account: user,
     //   type: TransactionType.WITHDRAW,
@@ -84,9 +83,7 @@ export class TransactionRepository {
     //   billing_cycle,
     //   comment: `Payment transaction`,
     // };
-
     // user.balance = 0;
-
     // await this.ds.manager.save(transaction);
     // await this.ds.manager.save(user);
     // end db transaction

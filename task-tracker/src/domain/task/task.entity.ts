@@ -73,7 +73,7 @@ export class Task extends AggregateRoot {
 
     process.nextTick(() =>
       newTask.publish(
-        new NewTaskAdded(id, worker.id, title, description, jira_id),
+        new NewTaskAdded(id, worker.public_id, title, description, jira_id),
       ),
     );
 
@@ -82,17 +82,17 @@ export class Task extends AggregateRoot {
 
   complete() {
     this.status = TaskStatus.completed();
-    this.publish(new TaskCompleted(this.id, this.worker.id));
+    this.publish(new TaskCompleted(this.id, this.worker.public_id));
   }
 
   reassign(newWorker: Worker) {
     const prev_worker = this.worker;
     //@ts-ignore
     this.worker = newWorker;
-    this.publish(new TaskReassigned(this.id, prev_worker.id, newWorker.id));
+    this.publish(new TaskReassigned(this.id, prev_worker.public_id, newWorker.public_id));
   }
 
   performedBy(worker_id: string): boolean {
-    return this.worker?.id === worker_id;
+    return this.worker?.public_id === worker_id;
   }
 }

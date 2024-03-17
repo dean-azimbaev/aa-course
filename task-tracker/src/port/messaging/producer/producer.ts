@@ -38,6 +38,10 @@ export class TaskTrackerProducer implements OnModuleInit {
       message.key = event.public_id;
     }
 
+    await this.eventsMeta.validate(
+      JSON.parse(this.toMessage(event).value as string) as BrokerMessage,
+    );
+
     this._producer.send({
       topic: topic,
       messages: [this.toMessage(event)],

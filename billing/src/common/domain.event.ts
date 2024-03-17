@@ -1,6 +1,5 @@
 export class DomainEvent {
   public readonly name: string;
-  public readonly public_id?: string;
 
   constructor(name: string) {
     this.name = name;

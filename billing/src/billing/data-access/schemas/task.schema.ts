@@ -4,7 +4,7 @@ export class TaskDA {
   id: string;
   public_id: string;
   price: number;
-  comment: string;
+  title: string;
 }
 
 export const TaskSchema = new EntitySchema<TaskDA>({
@@ -19,11 +19,13 @@ export const TaskSchema = new EntitySchema<TaskDA>({
     },
     public_id: {
       type: 'uuid',
+      unique: true,
     },
     price: {
       type: 'int',
+      default: () => 'floor(random() * 20 + 1)',
     },
-    comment: {
+    title: {
       type: 'varchar',
       nullable: true,
     },

@@ -9,6 +9,19 @@ export class BillingCycleDA {
   start_date: Date;
   end_date: Date;
   status: BillingCycleStatus;
+
+  close() {
+    this.status = BillingCycleStatus.CLOSED;
+  }
+
+  open() {
+    const hour24 = 1000 * 86400;
+    const startDate = Date.now();
+
+    this.start_date = new Date(startDate);
+    this.end_date = new Date(startDate + hour24);
+    this.status = BillingCycleStatus.OPENED;
+  }
 }
 
 export const billingCycleSchema = new EntitySchema<BillingCycleDA>({
@@ -19,7 +32,7 @@ export const billingCycleSchema = new EntitySchema<BillingCycleDA>({
     id: {
       type: 'int',
       generated: 'increment',
-      primary: true
+      primary: true,
     },
     status: {
       type: 'enum',

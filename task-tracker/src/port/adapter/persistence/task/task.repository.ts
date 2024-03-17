@@ -40,7 +40,7 @@ export class TaskRepository implements IRepository {
 
   save(task: Task): Promise<Task> {
     const taskGettersMapping: Partial<TaskDA> = {
-      worker_id: task.worker.id,
+      worker_id: task.worker.public_id,
       title: task.title,
       status: task.status,
       jira_id: task.jira_id,

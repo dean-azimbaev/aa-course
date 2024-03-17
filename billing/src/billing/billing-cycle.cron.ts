@@ -1,11 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 
 import { CycleRepository } from './data-access';
 
 @Injectable()
-export class BillingCycleCron {
+export class BillingCycleCron implements OnApplicationBootstrap {
   constructor(private repo: CycleRepository) {}
+
+  async onApplicationBootstrap() {
+    await this.repo.new();
+  }
 
   @Cron(CronExpression.EVERY_10_SECONDS, {
     name: 'close-billing-cycle',
