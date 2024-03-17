@@ -26,12 +26,8 @@ export class AddNewTaskHandler implements ICommandHandler<AddNewTask> {
       Task.New(taskId, title, description, jira_id, worker),
     );
 
-    //@ts-ignore
-    console.log(newTask);
-
     await this.taskRepo.save(newTask);
 
-    // emit event
     newTask.commit();
   }
 }

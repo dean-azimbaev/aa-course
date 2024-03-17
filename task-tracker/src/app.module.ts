@@ -33,8 +33,8 @@ export class AppModule implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    this.publisher.bind(this.eventBus.publisher);
-    //@ts-ignore
-    this.eventBus.publisher = this.publisher;
+      this.publisher.bind(this.eventBus.publisher);
+      //@ts-ignore
+      this.eventBus.publisher = this.publisher;
   }
 }

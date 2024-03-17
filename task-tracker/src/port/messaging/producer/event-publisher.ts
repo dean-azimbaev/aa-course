@@ -1,9 +1,11 @@
 import { IEvent, IEventPublisher } from '@nestjs/cqrs';
+import { Injectable } from '@nestjs/common';
 
 import { DomainEvent } from 'src/common';
 import { IDomainEventPublisher } from './types';
 import { TaskTrackerProducer } from './producer';
 
+@Injectable()
 export class DomainEventPublisher implements IDomainEventPublisher {
   private _original: IEventPublisher;
 

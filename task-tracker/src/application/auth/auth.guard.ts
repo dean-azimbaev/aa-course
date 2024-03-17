@@ -19,6 +19,11 @@ export class AuthGuard implements CanActivate {
     try {
       const req = context.switchToHttp().getRequest();
       const jwt = this.extractJwtFromRequest(req);
+
+      if (!jwt) {
+        throw new UnauthorizedException('Jwt not provided');
+      }
+
       const user = await this.auth.verify(jwt);
 
       this.logger.debug(`Verified jwt: ${JSON.stringify(user)}`);
@@ -33,6 +38,6 @@ export class AuthGuard implements CanActivate {
   }
 
   private extractJwtFromRequest(req: Request): string {
-    return req.headers['authorization']?.split('Bearer ')[0];
+    return req.headers['authorization']?.split('Bearer ')[1];
   }
 }
