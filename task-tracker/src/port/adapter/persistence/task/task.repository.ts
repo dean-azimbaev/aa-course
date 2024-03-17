@@ -39,11 +39,15 @@ export class TaskRepository implements IRepository {
   }
 
   save(task: Task): Promise<Task> {
-    const workerMapping: Partial<TaskDA> = {
-      worker_id: task.worker.id,
+    const taskGettersMapping: Partial<TaskDA> = {
+      worker_id: task.worker.public_id,
+      title: task.title,
+      status: task.status,
+      jira_id: task.jira_id,
+      description: task.description,
     };
 
-    const save = Object.assign(new TaskDA(), workerMapping, task);
+    const save = Object.assign(new TaskDA(), taskGettersMapping, task);
 
     return this.ds.manager.save(TaskDA, save).then(() => task);
   }

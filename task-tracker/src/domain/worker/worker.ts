@@ -1,3 +1,3 @@
 export class Worker {
-  constructor(public readonly id: string) {}
+  constructor(public readonly public_id: string) {}
 }

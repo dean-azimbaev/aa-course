@@ -19,7 +19,7 @@ export class OugoinEventsMetaManager implements EventsMetaManager {
   public readonly events: EventsMeta = {
     [NewTaskAdded.name]: {
       topic: OutgoingTopic.TASKS_MANAGEMENT,
-      version: 1,
+      version: 2,
       name: NewTaskAdded.name,
       domain: 'tasks',
     },

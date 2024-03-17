@@ -8,7 +8,7 @@
     "event_data": {
       "type": "object",
       "properties": {
-        "public_id": {
+        "public_id": {  
           "type": "string"
         },
         "worker_id": {
@@ -24,7 +24,7 @@
           "type": "string"
         }
       },
-      "required": ["public_id", "worker_id", "description", "jira_id"]
+      "required": ["public_id", "worker_id", "title", "description", "jira_id"]
     }
   },
   "type": "object",

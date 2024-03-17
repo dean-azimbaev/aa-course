@@ -8,13 +8,14 @@ export const dbConfig = () => ({
       database: process.env.POSTGRES_DATABASE,
       password: process.env.POSTGRES_PASSWORD,
       entities: [
-        'dist/src/data-access/**/*.schema{.ts,.js}',
-        'dist/src/data-access/*.schema.ts',
+        'dist/src/**/data-access/*.schema{.ts,.js}',
+        'dist/src/**/data-access/schemas/*.schema{.ts,.js}',
       ],
       autoLoadEntities: true,
       migrations: ['dist/migrations/*{.js,.ts}'],
       migrationsRun: true,
       migrationsTableName: 'migrations_history',
+      logging: true
     },
   },
 });
